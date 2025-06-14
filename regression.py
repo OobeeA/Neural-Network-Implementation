@@ -3,7 +3,6 @@ import pickle
 import numpy as np
 import pandas as pd
 
-# Python libraries we've imported
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import make_column_transformer
 from sklearn.pipeline import make_pipeline
@@ -14,8 +13,7 @@ from sklearn.metrics import r2_score
 class Regressor():
 
     def __init__(self, x, nb_epoch = 1000):
-        # You can add any input parameters you need
-        # Remember to set them with a default value for LabTS tests
+
         """ 
         Initialise the model.
           
@@ -27,11 +25,6 @@ class Regressor():
 
         """
 
-        #######################################################################
-        #                       ** START OF YOUR CODE **
-        #######################################################################
-
-        # Replace this code with your own
         self.transformer = None
         self.scalar = None
         self.categories = [('ocean_proximity',['INLAND','<1H OCEAN','NEAR BAY', 'NEAR OCEAN', 'ISLAND'])]
@@ -43,9 +36,6 @@ class Regressor():
         self.nb_epoch = nb_epoch 
         return
 
-        #######################################################################
-        #                       ** END OF YOUR CODE **
-        #######################################################################
 
     def _preprocessor(self, x, y = None, training = False):
         """ 
@@ -65,25 +55,6 @@ class Regressor():
               size (batch_size, 1).
             
         """
-
-        #######################################################################
-        #                       ** START OF YOUR CODE **
-        #######################################################################
-
-        # Replace this code with your own
-        # Return preprocessed x and y, return None for y if it was None
-
-
-        # If it's a training set, we can use this to create our one hot encoding for all our datasets that we'll be using it to train
-
-        #data = pd.concat([X, Y], axis=1)
-
-        ## Shuffle the dataset
-        #shuffled_data = shuffle(data)
-
-        # Split the shuffled dataset back into X and Y
-        #X_shuffled = shuffled_data.drop(columns=[Y.columns[0]])
-        #Y_shuffled = shuffled_data[Y.columns[0]]
 
 
         if training:
@@ -145,9 +116,7 @@ class Regressor():
 
         return transformed_x, (transformed_y if isinstance(y, pd.DataFrame) else None)
 
-        #######################################################################
-        #                       ** END OF YOUR CODE **
-        #######################################################################
+
 
         
     def fit(self, x, y):
@@ -164,9 +133,6 @@ class Regressor():
 
         """
 
-        #######################################################################
-        #                       ** START OF YOUR CODE **
-        #######################################################################
 
         X, Y = self._preprocessor(x, y = y, training = True) # Do not forget
         layers = [13, 1024, 512, 256, 32, 1]
@@ -209,19 +175,10 @@ class Regressor():
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
-                #if loss ** 0.5 < 50000:
-                #    break
-            #if loss ** 0.5 < 50000:
-            #    break
-            #with torch.no_grad():
-            #     y_pred = self.model(X)
-            #     accuracy = (y_pred.round() == Y).float().mean()
-            #     print(f"Accuracy {accuracy}")
+
         return self
 
-        #######################################################################
-        #                       ** END OF YOUR CODE **
-        #######################################################################
+
 
             
     def predict(self, x):
@@ -237,16 +194,10 @@ class Regressor():
 
         """
 
-        #######################################################################
-        #                       ** START OF YOUR CODE **
-        #######################################################################
-
         X, _ = self._preprocessor(x, training = False) # Do not forget
         return self.model(X)
 
-        #######################################################################
-        #                       ** END OF YOUR CODE **
-        #######################################################################
+
 
     def score(self, x, y):
         """
@@ -262,10 +213,6 @@ class Regressor():
 
         """
 
-        #######################################################################
-        #                       ** START OF YOUR CODE **
-        #######################################################################
-
         X, Y = self._preprocessor(x, y = y, training = False) # Do not forget
 
 
@@ -280,11 +227,8 @@ class Regressor():
         print("The l1 error", l1_error)
         #print("The r2", r2)
 
-        return 0 # Replace this code with your own
+        return 0 
 
-        #######################################################################
-        #                       ** END OF YOUR CODE **
-        #######################################################################
 
 
 def save_regressor(trained_model): 
@@ -309,61 +253,9 @@ def load_regressor():
 
 
 
-def RegressorHyperParameterSearch(): 
-    # Ensure to add whatever inputs you deem necessary to this function
-    """
-    Performs a hyper-parameter for fine-tuning the regressor implemented 
-    in the Regressor class.
-
-    Arguments:
-        Add whatever inputs you need.
-        
-    Returns:
-        The function should return your optimised hyper-parameters. 
-
-    """
-
-    #######################################################################
-    #                       ** START OF YOUR CODE **
-    #######################################################################
-
-    return  # Return the chosen hyper parameters
-
-    #######################################################################
-    #                       ** END OF YOUR CODE **
-    #######################################################################
-
-
-
-def example_main():
-
-    output_label = "median_house_value"
-
-    # Use pandas to read CSV data as it contains various object types
-    # Feel free to use another CSV reader tool
-    # But remember that LabTS tests take Pandas DataFrame as inputs
-    data = pd.read_csv("housing.csv") 
-
-    # Splitting input and output
-    x_train = data.loc[:, data.columns != output_label]
-    y_train = data.loc[:, [output_label]]
-
-    # Training
-    # This example trains on the whole available dataset. 
-    # You probably want to separate some held-out data 
-    # to make sure the model isn't overfitting
-    regressor = Regressor(x_train, nb_epoch = 10)
-    regressor.fit(x_train, y_train)
-    save_regressor(regressor)
-
-    # Error
-    error = regressor.score(x_train, y_train)
-    print("\nRegressor error: {}\n".format(error))
-
 
 if __name__ == "__main__":
     output_label = "median_house_value"
-    #example_main()
     data = pd.read_csv("housing.csv") 
 
     # Splitting input and output
@@ -371,9 +263,6 @@ if __name__ == "__main__":
     y_train = data.loc[:, [output_label]]
 
     # Training
-    # This example trains on the whole available dataset. 
-    # You probably want to separate some held-out data 
-    # to make sure the model isn't overfitting
     regressor = Regressor(x_train, nb_epoch = 10)
     regressor.fit(x_train, y_train)
     regressor.score(x_train, y_train)
